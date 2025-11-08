@@ -1,0 +1,77 @@
+<!Doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Submit User Info</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="form-container">
+  <h2>Create User</h2>
+
+  <form id="userForm" action="/inventory/search" method="post" accept-charset="UTF-8" autocomplete="on">
+    <label for="username">Username:</label>
+    <input id="username" name="username" type="text"
+           placeholder="your_username" autocomplete="username"
+           required maxlength="30" />
+
+    <label for="password">Password:</label>
+    <!-- make it visible & proper type (stop using .hidden-password) -->
+    <input id="password" name="password" type="password"
+           placeholder="••••••••" autocomplete="new-password"
+           required minlength="8" maxlength="128" />
+
+    <label for="age">Age:</label>
+    <input id="age" name="age" type="number"
+           placeholder="18" min="13" max="120" step="1" required />
+
+    <label for="email">Email:</label>
+    <input id="email" name="email" type="email"
+           placeholder="name@example.com" autocomplete="email"
+           required maxlength="254" />
+
+    <label for="message">Message (10 words or less):</label>
+    <textarea id="message" name="message"
+              placeholder="Short summary…" rows="4"
+              required maxlength="300"></textarea>
+    <small id="msgCounter">0 / 10 words</small>
+
+    <button type="submit">Submit</button>
+  </form>
+</div>
+
+<script>
+  const form = document.getElementById('userForm');
+  const msg = document.getElementById('message');
+  const counter = document.getElementById('msgCounter');
+
+  function countWords(s) {
+    return s.trim().split(/\s+/).filter(Boolean).length;
+  }
+
+  function updateWordCount() {
+    const wc = countWords(msg.value);
+    counter.textContent = wc + ' / 10 words';
+    if (wc > 10) {
+      msg.setCustomValidity('Please keep it to 10 words or fewer.');
+    } else {
+      msg.setCustomValidity('');
+    }
+  }
+
+  msg.addEventListener('input', updateWordCount);
+  form.addEventListener('submit', e => {
+    updateWordCount();
+    if (!form.checkValidity()) {
+      e.preventDefault();
+      form.reportValidity();
+    }
+  });
+
+  updateWordCount(); // initialize counter
+</script>
+
+</body>
+</html>
